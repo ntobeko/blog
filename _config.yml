@@ -4,7 +4,7 @@ email:       nto@nto.co.za
 author:      John Otander
 description: "A simple, beautiful theme for Jekyll that emphasizes content rather than aesthetic fluff."
 baseurl:     "/blog"
-url:         "http://nto.co.za"
+url:         "http://nto.co.za/blog"
 date_format: "%b %-d, %Y"
 
 # Google analytics
@@ -13,10 +13,10 @@ google_analytics: UA-53548208-1
 google_verification:
 
 # Optional features
-animated:             false
+animated:             true
 show_related_posts:   false
 show_post_footers:    false
-show_social_icons:    false
+show_social_icons:    true
 ajaxify_contact_form: false
 
 # Disqus post comments
