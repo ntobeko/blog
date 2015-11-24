@@ -4,7 +4,7 @@ title:      Spring Component Mocking - A Hack
 date:       2015-11-24
 summary:    A writeup of a few aspects to consider when mocking Spring components. An example is given via the persistence layer.
 categories: dynamic-proxy spring inject unit-testing
----
+---I
 
 I'm not the biggest fan of using mock objects when implementing automated unit tests. The reason I say this is because very often, you find yourself meddling in the details of a method's implementation instead of focusing on simply testing it's interface. The extensive use of mock objects results in tests that are very brittle - i.e., any slight change to a method's implementation requires the updating of related test cases. For persistence related testing, I prefer setting up the data and running the tests in a real in-memory database like [HSQLDB](http://hsqldb.org/). There are those edge cases however that are easier to simulate using mock objects (e.g., all kinds of exceptions that can be thrown by the persistence layer). In a Spring/Hibernate environment, this can be achieved by injecting a mocked [DAO](https://en.wikipedia.org/wiki/Data_access_object) into a real service object.
 
@@ -168,16 +168,23 @@ public class TestBankAPI {
 So here's the problem. The above injection won't work. If we run the above code, we'll find that the DAO on which `save` is invoked, won't be our mocked one; it will be the original one injected by Spring in the autowire process. When we call `save` on `bankService`, we must remember that by default, `bankService` is actually a [Cglib](https://github.com/cglib/cglib) dynamic proxy. So when we inject our mocked DAO into `bankService`, we're injecting it into the proxy and not the real component. Spring makes use of dynamic proxies (either JDK or Cglib) to implement AOP and interceptors. To make sure we're injecting the mocked DAO into the target `bankService` component, we need to change the `injectField()` method as follows:
 
 {% highlight java lineanchors %}
-public static void injectField(Class objectClass, Object object, String fieldName, Object fieldValue) throws Exception {
-    	// Check if we're dealing with an 'advised' object (proxied), and if we are
-    	// get the underlying target object
-        if (object instanceof Advised)
-            object = ((Advised)object).getTargetSource().getTarget();
+    public static void injectField(Object object, String fieldName, Object fieldValue) throws TestException {
+        try {
+    	    // Check if we're dealing with an 'advised' object (proxied), and if we are
+    	    // get the underlying target object
+            if (object instanceof Advised)
+                object = ((Advised)object).getTargetSource().getTarget();
 
-        // Now we're sure we have the correct target object into which we inject 'fieldValue'
-        Field field = objectClass.getDeclaredField(fieldName);
-        field.setAccessible(true);
-        field.set(object, fieldValue);
+            // Get the member variable for which the value must be replaced
+            Field field = object.getClass().getDeclaredField(fieldName);
+            // Make sure it's accessible
+            field.setAccessible(true);
+            // Replace the value
+            field.set(object, fieldValue);
+        }
+        catch (Exception e) {
+            throw new TestException(e);
+        }
     }
 {% endhighlight %}
 
