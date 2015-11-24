@@ -4,7 +4,7 @@ title:      Spring Component Mocking - A Hack
 date:       2015-11-24
 summary:    A writeup of a few aspects to consider when mocking Spring components. An example is given via the persistence layer.
 categories: dynamic-proxy spring inject unit-testing
----I
+---
 
 I'm not the biggest fan of using mock objects when implementing automated unit tests. The reason I say this is because very often, you find yourself meddling in the details of a method's implementation instead of focusing on simply testing it's interface. The extensive use of mock objects results in tests that are very brittle - i.e., any slight change to a method's implementation requires the updating of related test cases. For persistence related testing, I prefer setting up the data and running the tests in a real in-memory database like [HSQLDB](http://hsqldb.org/). There are those edge cases however that are easier to simulate using mock objects (e.g., all kinds of exceptions that can be thrown by the persistence layer). In a Spring/Hibernate environment, this can be achieved by injecting a mocked [DAO](https://en.wikipedia.org/wiki/Data_access_object) into a real service object.
 
