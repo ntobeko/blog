@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Mocking Persistence in a Spring Service Method - A Hack
+title:      Spring Component Mocking - A Hack
 date:       2015-11-24
 summary:    A writeup of a few aspects to consider when mocking Spring components. An example is given via the persistence layer.
 categories: dynamic-proxy spring inject unit-testing
