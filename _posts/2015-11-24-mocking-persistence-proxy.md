@@ -15,17 +15,17 @@ Consider the following Spring based service implementation.
 
 **The Interface:**
 
-```java
+{% highlight java lineanchors %}
 public interface BankAPI {
     public void save(Account account) throws BankServiceException;
     public Account getAccount(String accountNumber) throws BankServiceException;
 }
-```
+{% endhighlight %}
 
 **The Concrete Class:**
 
 
-```java 
+{% highlight java lineanchors %}
 @Service
 public class BankAPIImpl implements BankAPI {
 
@@ -65,7 +65,7 @@ public class BankAPIImpl implements BankAPI {
         }
     }
 }
-```
+{% endhighlight %}
 
 In the above example, we have a `BankAPI` service that provides access to a bank's infrastructure. The service method defined allows us to save a customer's account information.
 
@@ -76,7 +76,7 @@ The Test and associated Hack
 
 Below is the test class with all the juicy stuff fleshed out. The main test method `testSaveAccountFailNoConnection()` sets up the DAO mock object, expecting that `CannotGetJdbcConnectionException` will be thrown. After the mocking is setup, the service object is injected with the mocked DAO (the hack). The service object's `save()` method is then called, resulting in the expected database connection exception being thrown. At the end of the test, some clean up happens where the mocked DAO is replaced with the real one. 
 
-```java 
+{% highlight java lineanchors %}
 public class TestBankAPI {
 
     private static final Log LOG = LogFactory.getLog(TestBankAPI.class);
@@ -161,13 +161,13 @@ public class TestBankAPI {
         }
     }
 }
-```
+{% endhighlight %}
 
 **The Gotcha (Spring)**
 
 So here's the problem. The above injection won't work. If we run the above code, we'll find that the DAO on which `save` is invoked, won't be our mocked one; it will be the original one injected by Spring in the autowire process. When we call `save` on `bankService`, we must remember that by default, `bankService` is actually a [Cglib](https://github.com/cglib/cglib) dynamic proxy. So when we inject our mocked DAO into `bankService`, we're injecting it into the proxy and not the real component. Spring makes use of dynamic proxies (either JDK or Cglib) to implement AOP and interceptors. To make sure we're injecting the mocked DAO into the target `bankService` component, we need to change the `injectField()` method as follows:
 
-```java 
+{% highlight java lineanchors %}
 public static void injectField(Class objectClass, Object object, String fieldName, Object fieldValue) throws Exception {
     	// Check if we're dealing with an 'advised' object (proxied), and if we are
     	// get the underlying target object
@@ -179,7 +179,7 @@ public static void injectField(Class objectClass, Object object, String fieldNam
         field.setAccessible(true);
         field.set(object, fieldValue);
     }
-```
+{% endhighlight %}
 
 The above inject code will ensure we inject our mocked DAO into the correct target component. By default JUnit runs the tests sequentially, so we can be sure that there are no side-effects impacting other tests that also use `bankService`.
 
