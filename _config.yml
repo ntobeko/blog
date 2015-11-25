@@ -1,7 +1,7 @@
 # Site settings
 title:       \[De\]code
 email:       nto@nto.co.za
-author:      John Otander
+author:      Ntobeko Wakaba
 description: "Code and stuff in between - no fluff!"
 baseurl:     ""
 url:         "http://nto.co.za"
@@ -30,11 +30,11 @@ facebook_appid:
 facebook_comments_number: 10
 
 # Social icons
-github_username:
+github_username: ntobeko
 bitbucket_username:
 stackoverflow_id:
-twitter_username:
-google_plus_id:
+twitter_username: ntobeko
+google_plus_id: NtobekoWakaba
 linkedin_username:
 angellist_username:
 medium_id:
@@ -43,12 +43,12 @@ paypal_url:
 flattr_button:
 
 # Post sharing icons
-show_sharing_icons: false
+show_sharing_icons: true
 share_text: 'Share this post!'
 # Change to 'true' to enable individual icons
 share_facebook: false
-share_twitter: false
-share_googleplus: false
+share_twitter: true
+share_googleplus: true
 share_linkedin: false
 share_digg: false
 share_tumblr: false
