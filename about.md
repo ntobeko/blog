@@ -9,3 +9,5 @@ This blog is mostly about code and stuff in between. I avoid documenting my rant
 This awesome Jekyll theme was crafted with <3 by [@4lpine](https://twitter.com/4lpine).
 
 Checkout the [Github repository](https://github.com/johnotander/pixyll) to download it.
+
+![Site QR](images/code.png)
